@@ -53,6 +53,7 @@
               "node_modules/primeng/resources/primeng.min.css"
             ],
             "scripts": [
+              "node_modules/toastr/build/toastr.min.js",
               "node_modules/jquery/dist/jquery.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.min.js",
               "node_modules/chart.js/dist/Chart.bundle.js"

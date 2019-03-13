@@ -40,6 +40,55 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
     this.setPageTitle();
   }
 
+  submitForm() {
+    this.submittingForm = true;
+
+    if (this.currentAction === 'new') {
+      this.createCategory();
+    } else if (this.currentAction === 'edit') {
+      this.updateCategory();
+    } else {
+      alert('Ação inválida!');
+    }
+  }
+
+  private createCategory() {
+    const category: Category = Object.assign(new Category(), this.categoryForm.value);
+
+    this.categoryService.create(category)
+      .subscribe(
+          (cat) => this.actionsForSuccess(cat),
+          error => this.actionsForError(error)
+      );
+  }
+
+  private updateCategory() {
+    const category: Category = Object.assign(new Category(), this.categoryForm.value);
+    this.categoryService.update(category)
+      .subscribe(
+          (cat) => this.actionsForSuccess(cat),
+          error => this.actionsForError(error)
+      );
+  }
+
+  private actionsForError(error) {
+    toastr.error('Ocorreu um erro ao processar sua solicitação!');
+    this.submittingForm = false;
+
+    if (error.status === 422) {
+      this.serverErrorMessages = JSON.parse(error._body).errors;
+    } else {
+      this.serverErrorMessages = ['Falha na comunicação com servidor!'];
+    }
+  }
+
+  private actionsForSuccess(category: Category) {
+    toastr.success('Solicitação processada com sucesso!');
+
+    this.router.navigateByUrl('categories', {skipLocationChange: true})
+    .then(() => this.router.navigate(['categories', category.id, 'edit']));
+  }
+
   private setCurrentAction() {
     if (this.route.snapshot.url[0].path === 'new') {
       this.currentAction = 'new';
@@ -50,7 +99,7 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
   private buildCategoryForm() {
     this.categoryForm = this.formBuilder.group({
       id: [null],
-      name: [null, [Validators.required, Validators.minLength(2)]],
+      name: [null, Validators.compose([Validators.minLength(2), Validators.required])],
       description: [null]
     });
   }
