@@ -16,7 +16,7 @@ import toastr from 'toastr';
 })
 export class CategoryFormComponent implements OnInit, AfterContentChecked {
 
-  currentAction: string;
+  currentAction = '';
   categoryForm: FormGroup;
   pageTitle: string;
   serverErrorMessages: string[] = null;
@@ -92,7 +92,7 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
   private setCurrentAction() {
     if (this.route.snapshot.url[0].path === 'new') {
       this.currentAction = 'new';
-    } else {
+    } else if (this.route.snapshot.url[1].path === 'edit') {
       this.currentAction = 'edit';
     }
   }

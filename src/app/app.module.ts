@@ -15,8 +15,8 @@ import { InMemoryDataBase } from './in-memory-database';
     BrowserModule,
     HttpClientModule,
 
-    // Configurações para ativar o InMemory BackEnd
     AppRoutingModule,
+    // Configurações para ativar o InMemory BackEnd
     HttpClientInMemoryWebApiModule.forRoot(InMemoryDataBase)
   ],
   providers: [],
