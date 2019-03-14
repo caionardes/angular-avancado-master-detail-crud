@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterContentChecked } from '@angular/core';
+import { Component, OnInit, AfterContentChecked, ViewChild, OnDestroy } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -8,13 +8,15 @@ import { CategoryService } from '../shared/category.service';
 import { switchMap } from 'rxjs/operators';
 
 import toastr from 'toastr';
+// import { EntryFormComponent } from '../../entries/entry-form/entry-form.component';
+import { Subscription, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-category-form',
   templateUrl: './category-form.component.html',
   styleUrls: ['./category-form.component.css']
 })
-export class CategoryFormComponent implements OnInit, AfterContentChecked {
+export class CategoryFormComponent implements OnInit, AfterContentChecked, OnDestroy {
 
   currentAction = '';
   categoryForm: FormGroup;
@@ -22,13 +24,24 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
   serverErrorMessages: string[] = null;
   submittingForm = false;
   category = new Category();
+  subscriptions: Subscription[];
+
+  // @ViewChild('entryTeste') entryTeste: EntryFormComponent;
+  // app-entry-form
 
   constructor(
-      private categoryService: CategoryService,
-      private route: ActivatedRoute,
-      private router: Router,
-      private formBuilder: FormBuilder
-    ) { }
+    private categoryService: CategoryService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private formBuilder: FormBuilder
+    ) {
+      this.subscriptions = [];
+    }
+
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub: Subscription) => sub.unsubscribe());
+  }
 
   ngOnInit() {
     this.setCurrentAction();
@@ -37,7 +50,15 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
   }
 
   ngAfterContentChecked() {
+  //   setTimeout(() => {
+  //     this.entryTeste.currentAction = 'TESTE Alterado';
+  //   }, 200);
     this.setPageTitle();
+  }
+
+  OnDescriptionChangePai(desc: string) {
+    console.log(desc.substr);
+    this.categoryForm.get('description').setValue(desc);
   }
 
   submitForm() {
@@ -105,16 +126,25 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
   }
   private loadCategory() {
     if (this.currentAction === 'edit') {
-      this.route.paramMap.pipe(
+
+
+      const obs: Observable<Category> = this.route.paramMap.pipe(
         switchMap(params => this.categoryService.getById(+params.get('id')))
-      ).subscribe(
+      );
+
+      const temp: Subscription = obs.subscribe(
         (category) => {
           this.category = category;
           // faz o bind da categoria com o formulario categoryForm recem criado.
           this.categoryForm.patchValue(this.category);
+
+          temp.unsubscribe();
         },
         (error) => alert('Ocorreu um erro no servidor, tente mais tarde.')
       );
+
+
+      this.subscriptions.push(temp);
     }
   }
 

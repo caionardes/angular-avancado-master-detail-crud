@@ -18,6 +18,9 @@ import { IMaskModule } from 'angular-imask';
     CalendarModule,
     IMaskModule
   ],
-  declarations: [EntryListComponent, EntryFormComponent]
+  declarations: [EntryListComponent, EntryFormComponent],
+  exports: [
+    EntryFormComponent
+  ]
 })
 export class EntriesModule { }

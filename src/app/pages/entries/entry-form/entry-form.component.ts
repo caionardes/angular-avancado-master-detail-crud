@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterContentChecked } from '@angular/core';
+import { Component, OnInit, AfterContentChecked, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -18,7 +18,11 @@ import { CategoryService } from '../../categories/shared/category.service';
 })
 export class EntryFormComponent implements OnInit, AfterContentChecked {
 
+
+  // @Input()
   currentAction = '';
+  // @Output() OnDescriptionChange = new EventEmitter<string>();
+
   entryForm: FormGroup;
   pageTitle: string;
   serverErrorMessages: string[] = null;
@@ -65,6 +69,11 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
   ngAfterContentChecked() {
     this.setPageTitle();
   }
+
+  // notificaPai() {
+  //   console.log(this.entryForm.get('description').value);
+  //   this.OnDescriptionChange.emit(this.entryForm.get('description').value + ' OIII ');
+  // }
 
   submitForm() {
     this.submittingForm = true;
