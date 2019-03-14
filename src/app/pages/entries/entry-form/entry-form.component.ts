@@ -8,6 +8,8 @@ import { EntryService } from '../shared/entry.service';
 import { switchMap } from 'rxjs/operators';
 
 import toastr from 'toastr';
+import { Category } from '../../categories/shared/category.model';
+import { CategoryService } from '../../categories/shared/category.service';
 
 @Component({
   selector: 'app-entry-form',
@@ -22,6 +24,7 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
   serverErrorMessages: string[] = null;
   submittingForm = false;
   entry = new Entry();
+  categories: Array<Category>;
 
   imaskConfig = {
     mask: Number,
@@ -48,13 +51,15 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
       private entryService: EntryService,
       private route: ActivatedRoute,
       private router: Router,
-      private formBuilder: FormBuilder
+      private formBuilder: FormBuilder,
+      private categoryService: CategoryService
     ) { }
 
   ngOnInit() {
     this.setCurrentAction();
     this.buildEntryForm();
     this.loadEntry();
+    this.loadCategories();
   }
 
   ngAfterContentChecked() {
@@ -71,6 +76,17 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
     } else {
       alert('Ação inválida!');
     }
+  }
+
+  get typeOptions(): Array<any> {
+    return Object.entries(Entry.types).map(
+      ([valueToMap, textToMap]) => {
+        return {
+          text: textToMap,
+          value: valueToMap
+        };
+      }
+    );
   }
 
   private createEntry() {
@@ -151,5 +167,11 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
       const entryName = this.entry.name || '';
       this.pageTitle = 'Editando Lançamento: ' + entryName;
     }
+  }
+
+  private loadCategories() {
+    this.categoryService.getAll().subscribe(
+      categories => this.categories = categories
+    );
   }
 }
