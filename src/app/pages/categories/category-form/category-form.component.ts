@@ -1,6 +1,5 @@
 import { Component, Injector } from '@angular/core';
-import { Validators } from '@angular/forms';
-
+import { FormsModule, Validators } from '@angular/forms';
 import { Category } from '../shared/category.model';
 import { CategoryService } from '../shared/category.service';
 import { BaseResourceFormComponent } from '../../../shared/components/base-resource-form/base-resource-form.component';
@@ -17,10 +16,11 @@ export class CategoryFormComponent extends BaseResourceFormComponent<Category> {
   }
 
   protected buildResourceForm(): void {
+
     this.resourceForm = this.formBuilder.group({
       id: [null],
-      name: [null, Validators.compose([Validators.minLength(2), Validators.required])],
-      description: [null]
+      name: [null, [Validators.minLength(2), Validators.required]],
+      description: [null, [Validators.minLength(2), Validators.required]]
     });
   }
 
