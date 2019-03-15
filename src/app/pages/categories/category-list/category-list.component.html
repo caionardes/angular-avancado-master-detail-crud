@@ -12,14 +12,12 @@
 <table class="table table-hover">
   <thead>
     <tr class="bg-primary text-light">
-      <th>Num</th>
       <th>Categoria</th>
       <th>Ações</th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let category of resources">
-      <td>{{category.id}}</td>
       <td>
         <strong>{{category.name}}</strong><br>
         <small>{{category.description}}</small>

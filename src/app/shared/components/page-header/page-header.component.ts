@@ -21,4 +21,7 @@ export class PageHeaderComponent implements OnInit {
   ngOnInit() {
   }
 
+  public get showButton(): boolean {
+    return this.buttonText != null;
+  }
 }
