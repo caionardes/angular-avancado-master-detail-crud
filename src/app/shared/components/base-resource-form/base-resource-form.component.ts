@@ -97,7 +97,7 @@ export abstract class BaseResourceFormComponent<T extends BaseResourceModel> imp
     if (this.currentAction === 'new') {
       this.pageTitle = this.creationPageTitle();
     } else {
-      this.pageTitle = this.editionPageTitle(this.resource);
+      this.pageTitle = this.editionPageTitle();
     }
   }
 
@@ -121,6 +121,6 @@ export abstract class BaseResourceFormComponent<T extends BaseResourceModel> imp
   }
 
   protected abstract creationPageTitle(): string;
-  protected abstract editionPageTitle(obj: T): string;
+  protected abstract editionPageTitle(): string;
   protected abstract buildResourceForm(): void;
 }
