@@ -18,12 +18,14 @@
 
       <div class="card-body">
         <div class="form-row">
+          <!-- Nome -->
           <div class="form-group col-md-4">
             <label for="name" >Nome</label>
             <input type="text" class="form-control" id="name" formControlName="name" />
             <app-form-field-error [form-control]="resourceForm.get('name')" ></app-form-field-error>
           </div>
 
+          <!-- Descricao -->
           <div class="form-group col-md-8">
               <label for="description" >Descrição</label>
               <input type="text" class="form-control" id="description" formControlName="description" />
